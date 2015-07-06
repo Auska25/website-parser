@@ -1,0 +1,1 @@
+add_library( auska25_html STATIC retriever.cpp)
