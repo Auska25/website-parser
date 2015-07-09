@@ -6,8 +6,10 @@ include_directories ( 	/usr/include/libxml++-2.6/
 						/usr/lib/x86_64-linux-gnu/glib-2.0/include/
 						/usr/lib/libxml++-2.6/include/
 					)
+					
+set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_CXX_FLAGS "-std=c++11")
+#set(CMAKE_CXX_FLAGS "-std=c++11")
 
 add_subdirectory(html)
 
@@ -26,5 +28,3 @@ set ( website_parser_libs
 	)
 
 target_link_libraries( website-parser ${website_parser_libs} )
-
-set_property(TARGET website-parser PROPERTY CXX_STANDARD 11)
