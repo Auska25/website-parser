@@ -5,34 +5,23 @@
  *      Author: karl
  */
 
-#include "retriever.hpp"
-
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Options.hpp>
 
-using namespace auska25;
+#include "parser_impl.hpp"
+#include "retriever.hpp"
+
+using namespace auska25::html;
 
 using std::string;
 using curlpp::options::Url;
 
-html::retriever::retriever(string& url) :
-        root_(NULL)
+std::unique_ptr<parser> retriever::get_from_url( const string& url) const
 {
-    html_ << Url(url);
+    auto html = std::unique_ptr<std::ostringstream>(new std::ostringstream);
+    *html << Url(url);
+
+    auto ret = std::unique_ptr<parser>(new parser_impl(html));
+
+    return ret;
 }
-
-void html::retriever::dump(std::ostream& out)
-{
-    out << html_.str();
-}
-
-void html::retriever::parse()
-{
-    // Parse HTML and create a DOM tree
-    xmlDoc* doc = htmlReadDoc((xmlChar*)html_.str().c_str(), NULL, NULL, HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING);
-
-    // Encapsulate raw libxml document in a libxml++ wrapper
-    xmlNode* r = xmlDocGetRootElement(doc);
-    xmlpp::Element* root = new xmlpp::Element(r);
-}
-

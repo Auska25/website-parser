@@ -5,6 +5,7 @@
 #include <memory>
 #include <iostream>
 #include "html/retriever.hpp"
+#include "html/parser.hpp"
 
 using namespace auska25;
 
@@ -12,11 +13,11 @@ int main(int argc, char *argv[] )
 {
     std::string url("http://example.com");
 
-    std::unique_ptr<html::retriever> retriever = std::unique_ptr<html::retriever>(new html::retriever(url));
+    html::retriever retriever;
 
-    retriever->dump(std::cout);
+    auto parser = retriever.get_from_url(url);
 
-    retriever->parse();
+    parser->dump(std::cout);
 
     return 0;
 }

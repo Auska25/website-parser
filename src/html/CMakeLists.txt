@@ -1,1 +1,1 @@
-add_library( auska25_html STATIC retriever.cpp)
+add_library( auska25_html STATIC retriever.cpp parser_impl.cpp)

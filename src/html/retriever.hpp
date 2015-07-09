@@ -13,25 +13,18 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <memory>
 
-#include <libxml/tree.h>
-#include <libxml/HTMLparser.h>
-#include <libxml++/libxml++.h>
+#include "parser_fwd.hpp"
 
 namespace auska25   {
 namespace html      {
 
 class retriever
 {
-private:
-    std::ostringstream  html_;
-    xmlpp::Element*     root_;
 public:
-    explicit retriever( std::string& url );
 
-    void dump(std::ostream& out);
-
-    void parse();
+    std::unique_ptr<parser> get_from_url(const std::string& url ) const;
 };
 
 }} //namespace auska25::html
