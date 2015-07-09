@@ -13,6 +13,8 @@
 namespace auska25   {
 namespace html      {
 
+typedef std::vector<std::string> links_t;
+
 class parser
 {
 public:

@@ -9,8 +9,6 @@ include_directories ( 	/usr/include/libxml++-2.6/
 					
 set(CMAKE_CXX_STANDARD 11)
 
-#set(CMAKE_CXX_FLAGS "-std=c++11")
-
 add_subdirectory(html)
 
 set ( website_parser_srcs 
@@ -25,6 +23,8 @@ set ( website_parser_libs
 		curl
 		xml++-2.6
 		xml2
+		glibmm-2.4
+		giomm-2.4
 	)
 
 target_link_libraries( website-parser ${website_parser_libs} )
