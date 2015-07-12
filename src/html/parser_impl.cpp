@@ -38,13 +38,36 @@ void parser_impl::create_tree()
 
 void parser_impl::parse_links()
 {
-    std::string xpath = "//*[@id=\"locator\"]/p[1]/b/font/text()";
+    std::string xpath = "//a/@href";
     auto elements = root_->find(xpath);
+
+    for(auto&& i : elements)
+    {
+        if( i->get_name().compare("href") == 0 )
+        {
+            auto children = i->get_children();
+
+            for(auto&& j : children)
+            {
+                if( j->get_name().compare("text") == 0 )
+                {
+                    links_.push_back(((xmlpp::ContentNode*)j )->get_content());
+                }
+            }
+        }
+    }
 }
 
 void parser_impl::dump(std::ostream& out)
 {
-    out << html_->str();
+    out << html_->str() << std::endl;
+
+    out << "Links:" << std::endl;
+
+    for(auto&& i : links_)
+    {
+        out << i << std::endl;
+    }
 }
 
 
