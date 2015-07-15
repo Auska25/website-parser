@@ -5,6 +5,7 @@
  *      Author: karl
  */
 #include <cstring>
+#include <set>
 
 #include <libxml/HTMLparser.h>
 
@@ -22,7 +23,7 @@ const std::string SINGLE_SLASH              = "/";
 
 std::string get_domain_from_url(const std::string& url)
 {
-    size_t pos = url.find('/', HTTP_STRING_SLASHES.length());
+    auto pos = url.find('/', HTTP_STRING_SLASHES.length());
 
     return (pos != std::string::npos) ? url.substr(0, pos) : url;
 }
@@ -37,7 +38,21 @@ void sanitise_link(std::string& link, const std::string& url)
     {
         link.insert(0, get_domain_from_url(url));
     }
+
+    auto pos = link.find('#');
+    if( pos != std::string::npos )
+    {
+        link.erase(pos);
+    }
+
+    pos = link.find('?');
+    if( pos != std::string::npos )
+    {
+        link.erase(pos);
+    }
 }
+
+typedef std::set<std::string> set_t;
 
 } // namespace
 
@@ -69,6 +84,8 @@ void parser_impl::create_tree()
 
 void parser_impl::parse_links()
 {
+    set_t set;
+
     std::string xpath = "//a/@href";
     auto elements = root_->find(xpath);
 
@@ -84,10 +101,19 @@ void parser_impl::parse_links()
                 {
                     std::string link = ((xmlpp::ContentNode*)j )->get_content();
                     sanitise_link(link, url_);
-                    links_.push_back(link);
+
+                    if(!link.empty())
+                    {
+                        set.insert(link);
+                    }
                 }
             }
         }
+    }
+
+    for(auto&& i : set)
+    {
+        links_.push_back(i);
     }
 }
 
