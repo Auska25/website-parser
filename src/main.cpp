@@ -6,16 +6,17 @@
 #include <iostream>
 #include "html/retriever.hpp"
 #include "html/parser.hpp"
+#include "config_cmdine.hpp"
 
 using namespace auska25;
 
 int main(int argc, char *argv[] )
 {
-    std::string url("http://stackoverflow.com/questions/6646405/how-do-you-add-boost-libraries-in-cmakelists-txt");
+    config_cmdline config(argc, argv);
 
     html::retriever retriever;
 
-    auto parser = retriever.get_from_url(url);
+    auto parser = retriever.get_from_url(config.get_url());
 
     auto links = parser->get_links();
 
