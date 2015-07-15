@@ -11,13 +11,18 @@ using namespace auska25;
 
 int main(int argc, char *argv[] )
 {
-    std::string url("http://example.com");
+    std::string url("http://stackoverflow.com/questions/6646405/how-do-you-add-boost-libraries-in-cmakelists-txt");
 
     html::retriever retriever;
 
     auto parser = retriever.get_from_url(url);
 
-    parser->dump(std::cout);
+    auto links = parser->get_links();
+
+    for(auto&& i : links)
+    {
+        std::cout << i << std::endl;
+    }
 
     return 0;
 }

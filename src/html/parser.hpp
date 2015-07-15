@@ -24,7 +24,9 @@ public:
         // do nothing
     };
 
-    virtual void dump(std::ostream& out) = 0;
+    virtual const links_t& get_links() const = 0;
+
+    virtual void dump(std::ostream& out) const = 0;
 };
 
 }} //namespace auska25::html

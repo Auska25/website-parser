@@ -29,7 +29,9 @@ public:
 
     ~parser_impl();
 
-    virtual void dump(std::ostream& out);
+    virtual const links_t& get_links() const;
+
+    virtual void dump(std::ostream& out) const;
 
 private:
     std::unique_ptr<std::ostringstream>     html_;

@@ -117,7 +117,12 @@ void parser_impl::parse_links()
     }
 }
 
-void parser_impl::dump(std::ostream& out)
+const links_t& parser_impl::get_links() const
+{
+    return links_;
+}
+
+void parser_impl::dump(std::ostream& out) const
 {
     out << html_->str() << std::endl;
 
