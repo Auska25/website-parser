@@ -4,6 +4,7 @@
  *  Created on: 9 Jul 2015
  *      Author: karl
  */
+#include <cstring>
 
 #include <libxml/HTMLparser.h>
 
@@ -13,19 +14,38 @@ using namespace auska25::html;
 
 namespace
 {
-    void sanitise_link(std::string& link)
+
+const std::string HTTP_STRING_SLASHES       = "http://";
+const std::string HTTP_STRING_NO_SLASHES    = "http:";
+const std::string DOUBLE_SLASHES            = "//";
+const std::string SINGLE_SLASH              = "/";
+
+std::string get_domain_from_url(const std::string& url)
+{
+    size_t pos = url.find('/', HTTP_STRING_SLASHES.length());
+
+    return (pos != std::string::npos) ? url.substr(0, pos) : url;
+}
+
+void sanitise_link(std::string& link, const std::string& url)
+{
+    if (link.compare(0,DOUBLE_SLASHES.length(), DOUBLE_SLASHES) == 0)
     {
-        if (link.compare(0,2, "//") == 0)
-        {
-            link.insert(0, "http:");
-        }
+        link.insert(0, HTTP_STRING_NO_SLASHES);
+    }
+    else if( link.compare(0, SINGLE_SLASH.length(), SINGLE_SLASH) == 0)
+    {
+        link.insert(0, get_domain_from_url(url));
     }
 }
 
-parser_impl::parser_impl( std::unique_ptr<std::ostringstream>& html ) :
+} // namespace
+
+parser_impl::parser_impl( std::unique_ptr<std::ostringstream>& html , std::string url) :
         root_(nullptr),
         html_(std::move(html)),
-        doc_(nullptr)
+        doc_(nullptr),
+        url_(url)
 {
     create_tree();
     parse_links();
@@ -63,7 +83,7 @@ void parser_impl::parse_links()
                 if( j->get_name().compare("text") == 0 )
                 {
                     std::string link = ((xmlpp::ContentNode*)j )->get_content();
-                    sanitise_link(link);
+                    sanitise_link(link, url_);
                     links_.push_back(link);
                 }
             }

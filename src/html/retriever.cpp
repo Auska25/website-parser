@@ -21,7 +21,7 @@ std::unique_ptr<parser> retriever::get_from_url( const string& url) const
     auto html = std::unique_ptr<std::ostringstream>(new std::ostringstream);
     *html << Url(url);
 
-    auto ret = std::unique_ptr<parser>(new parser_impl(html));
+    auto ret = std::unique_ptr<parser>(new parser_impl(html, url));
 
     return ret;
 }

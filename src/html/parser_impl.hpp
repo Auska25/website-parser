@@ -25,7 +25,7 @@ private:
     void parse_links();
 
 public:
-    explicit parser_impl( std::unique_ptr<std::ostringstream>& html );
+    explicit parser_impl( std::unique_ptr<std::ostringstream>& html, std::string url );
 
     ~parser_impl();
 
@@ -36,6 +36,7 @@ private:
     xmlDoc*                                 doc_;
     xmlpp::Element*                         root_;
     links_t                                 links_;
+    std::string                             url_;
 };
 
 }} //namespace auska25::html
