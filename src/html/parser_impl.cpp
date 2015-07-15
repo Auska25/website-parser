@@ -11,6 +11,17 @@
 
 using namespace auska25::html;
 
+namespace
+{
+    void sanitise_link(std::string& link)
+    {
+        if (link.compare(0,2, "//") == 0)
+        {
+            link.insert(0, "http:");
+        }
+    }
+}
+
 parser_impl::parser_impl( std::unique_ptr<std::ostringstream>& html ) :
         root_(nullptr),
         html_(std::move(html)),
@@ -51,7 +62,9 @@ void parser_impl::parse_links()
             {
                 if( j->get_name().compare("text") == 0 )
                 {
-                    links_.push_back(((xmlpp::ContentNode*)j )->get_content());
+                    std::string link = ((xmlpp::ContentNode*)j )->get_content();
+                    sanitise_link(link);
+                    links_.push_back(link);
                 }
             }
         }
